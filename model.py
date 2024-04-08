@@ -340,7 +340,8 @@ class Encoder(nn.Module):
                 """CASE C"""
                 print(emb_pro.shape)
                 # exit(0)
-                # emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
+                emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
+                print(emb_pro_.shape)
                 # projection_head = self.projection_head(emb_pro_)
                 # exit(0)
                 exit(0)
