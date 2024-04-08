@@ -83,6 +83,7 @@ class LocalizationDataset(Dataset):
     def get_pos_samples(self, anchor_idx):
         filtered_samples = [sample for idx, sample in enumerate(self.samples) if idx != anchor_idx] #all candidate exlude itself.
         anchor_type_protein = self.samples[anchor_idx][4] #class 0000 0001
+        print(anchor_type_protein, self.samples[anchor_idx][0] )
         pos_samples = [sample for sample in filtered_samples if
                        np.any(np.logical_and(anchor_type_protein == 1, sample[4] == 1))]
         if len(pos_samples) < self.n_pos:
