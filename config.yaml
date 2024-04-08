@@ -17,7 +17,7 @@ encoder:
   prm4prmpro: ppi
   frag_overlap: 100
 
-PEFT: frozen #lora # FT, PFT, frozen, lora, PromT
+PEFT: PFT #lora # FT, PFT, frozen, lora, PromT
 
 train_settings:
   dataloader: "clean" #"batchsample":old sampling,"clean": clean sampling, each batch contain anchors from different classes
