@@ -323,6 +323,7 @@ class Encoder(nn.Module):
                                   attention_mask=encoded_sequence['attention_mask'])
             last_hidden_state = remove_s_e_token(features.last_hidden_state,
                                                  encoded_sequence['attention_mask'])  # [batch, maxlen-2, dim]
+            """"add something here? the 1+n_pos+n_neg"""
             emb_pro_list = self.get_pro_emb(id, id_frags_list, seq_frag_tuple, last_hidden_state, self.overlap)
             emb_pro = torch.stack(emb_pro_list, dim=0)  # [sample, dim]
         # new code
@@ -338,6 +339,11 @@ class Encoder(nn.Module):
                     projection_head = self.projection_head(emb_pro_)
             else:
                 """CASE C"""
+                n_batch = 8
+                bch_anchors, bch_positives, bch_negatives = torch.split(emb_pro, [n_batch, n_batch*self.n_pos, n_batch*self.n_neg], dim=0)
+                print(bch_anchors.shape)
+                print(bch_positives.shape)
+                print(bch_negatives.shape)
                 print(emb_pro.shape)
                 # exit(0)
                 emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
