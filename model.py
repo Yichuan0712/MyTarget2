@@ -339,32 +339,22 @@ class Encoder(nn.Module):
                     projection_head = self.projection_head(emb_pro_)
             else:
                 """CASE C"""
-                n_batch = 8
-                bch_anchors, bch_positives, bch_negatives = torch.split(emb_pro, [n_batch, n_batch*self.n_pos, n_batch*self.n_neg], dim=0)
-                # print(bch_anchors.shape)
-                # print(bch_positives.shape)
-                # print(bch_negatives.shape)
-                # print(emb_pro.shape)
 
+                n_batch = int(emb_pro.shape[0]/(1+self.n_pos+self.n_neg))
+                print(n_batch)
+                exit(0)
+                bch_anchors, bch_positives, bch_negatives = torch.split(emb_pro, [n_batch, n_batch*self.n_pos, n_batch*self.n_neg], dim=0)
                 emb_pro_ = []
                 for i in range(n_batch):
                     anchor = bch_anchors[i].unsqueeze(0)
                     positive = bch_positives[(i * self.n_pos):(i * self.n_pos + self.n_pos)]
                     negative = bch_negatives[(i * self.n_neg):(i * self.n_neg + self.n_neg)]
-                    # print(anchor.shape)
-                    # print(positive.shape)
-                    # print(negative.shape)
                     triple = torch.cat((anchor, positive, negative), dim=0)
-                    # print(triple.shape)
                     emb_pro_.append(triple)
                 emb_pro_ = torch.stack(emb_pro_, dim=0)
-                # print(emb_pro_.shape)
-                # exit(0)
-                # emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
-                # print(emb_pro_.shape)
+
                 projection_head = self.projection_head(emb_pro_)
-                # exit(0)
-                # exit(0)
+
         else:
             """CASE D"""
             motif_logits = self.ParallelLinearDecoders(last_hidden_state)
