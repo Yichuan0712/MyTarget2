@@ -164,10 +164,12 @@ def train_loop(tools, configs, warm_starting, train_writer):
                     type_protein_pt_tuple += (pos_neg[one_in_a_batch][1][one_of_neg][4],)
                     sample_weight_tuple += (pos_neg[one_in_a_batch][1][one_of_neg][5],)
 
+        type_protein_pt_list = [torch.from_numpy(x) if isinstance(x, np.ndarray) else x for x in type_protein_pt_tuple]
+
         id_frags_list, seq_frag_tuple, target_frag_pt, type_protein_pt = make_buffer(id_frag_list_tuple,
                                                                                      seq_frag_list_tuple,
                                                                                      target_frag_nplist_tuple,
-                                                                                     type_protein_pt_tuple)
+                                                                                     type_protein_pt_list)
         with autocast():
             # Compute prediction and loss
             encoded_seq = tokenize(tools, seq_frag_tuple)
