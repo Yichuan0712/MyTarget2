@@ -345,6 +345,11 @@ class Encoder(nn.Module):
                 print(bch_positives.shape)
                 print(bch_negatives.shape)
                 print(emb_pro.shape)
+                for i in range(n_batch):
+                    anchor = bch_anchors[i].unsqueeze(0)
+                    positive = bch_positives[(i * self.n_pos):(i * self.n_pos + self.n_pos)]
+                    print(anchor.shape)
+                    print(positive.shape)
                 # exit(0)
                 emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
                 print(emb_pro_.shape)
