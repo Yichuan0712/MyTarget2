@@ -63,9 +63,8 @@ def train_loop(tools, configs, warm_starting,train_writer):
     # accuracy.to(tools['train_device'])
     # f1_score.to(tools["train_device"])
     global global_step
-    tools['net'].train().to(tools['train_device'])
-    # tools["optimizer"].zero_grad()
-    # scaler = GradScaler()
+    tools["optimizer"].zero_grad()
+    scaler = GradScaler()
     size = len(tools['train_loader'].dataset)
     num_batches = len(tools['train_loader'])
     train_loss = 0
@@ -78,9 +77,8 @@ def train_loop(tools, configs, warm_starting,train_writer):
     # Set the model to training mode - important for batch normalization and dropout layers
     # Unnecessary in this situation but added for best practices
     # model.train().cuda()
-
+    tools['net'].train().to(tools['train_device'])
     for batch, (id_tuple, id_frag_list_tuple, seq_frag_list_tuple, target_frag_nplist_tuple, type_protein_pt_tuple, sample_weight_tuple, pos_neg) in enumerate(tools['train_loader']):
-        tools["optimizer"].zero_grad()
         b_size = len(id_tuple)
         flag_batch_extension = False
         if (configs.supcon.apply and not warm_starting and pos_neg is not None) or \
@@ -185,12 +183,10 @@ def train_loop(tools, configs, warm_starting,train_writer):
             train_loss += weighted_loss_sum.item()
         
         # Backpropagation
-        # scaler.scale(weighted_loss_sum).backward()
-        # scaler.step(tools['optimizer'])
-        # scaler.update()
-        # tools['scheduler'].step()
-        weighted_loss_sum.backward()
-        tools["optimizer"].step()
+        scaler.scale(weighted_loss_sum).backward()
+        scaler.step(tools['optimizer'])
+        scaler.update()
+        tools['scheduler'].step()
         print(f"{global_step} loss:{weighted_loss_sum.item()}\n")
         train_writer.add_scalar('step loss', weighted_loss_sum.item(), global_step=global_step)
         train_writer.add_scalar('learning_rate', tools['scheduler'].get_lr()[0], global_step=global_step)
