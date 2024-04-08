@@ -352,6 +352,8 @@ class Encoder(nn.Module):
                     print(anchor.shape)
                     print(positive.shape)
                     print(negative.shape)
+                    triple = torch.cat((anchor, positive, negative), dim=0)
+                    print(triple.shape)
                     exit(0)
                 emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
                 print(emb_pro_.shape)
