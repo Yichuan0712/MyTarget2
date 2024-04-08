@@ -340,9 +340,9 @@ class Encoder(nn.Module):
                 """CASE C"""
                 print(emb_pro.shape)
                 # exit(0)
-                emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
-                projection_head = self.projection_head(emb_pro_)
-                exit(0)
+                # emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
+                # projection_head = self.projection_head(emb_pro_)
+                # exit(0)
         else:
             """CASE D"""
             motif_logits = self.ParallelLinearDecoders(last_hidden_state)
