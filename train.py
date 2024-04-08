@@ -105,6 +105,8 @@ def train_loop(tools, configs, warm_starting,train_writer):
                 for j in range(configs.supcon.n_pos):
                     for k in range(6):
                         pos_transformed[j][k].append(pos_neg[i][0][j][k])
+            print('*')
+            print(len(id_tuple))
             # print(len(id_tuple))
             for j in range(configs.supcon.n_pos):
                 id_tuple += tuple(pos_transformed[j][0])
