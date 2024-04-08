@@ -277,7 +277,20 @@ class Encoder(nn.Module):
             # print('-after mean', emb_pro.shape)
             emb_pro_list.append(emb_pro)
         return emb_pro_list
-
+    def reorganize_emb_pro(self, emb_pro):
+        n_batch = int(emb_pro.shape[0] / (1 + self.n_pos + self.n_neg))
+        bch_anchors, bch_positives, bch_negatives = torch.split(emb_pro,
+                                                                [n_batch, n_batch * self.n_pos, n_batch * self.n_neg],
+                                                                dim=0)
+        emb_pro_ = []
+        for i in range(n_batch):
+            anchor = bch_anchors[i].unsqueeze(0)
+            positive = bch_positives[(i * self.n_pos):(i * self.n_pos + self.n_pos)]
+            negative = bch_negatives[(i * self.n_neg):(i * self.n_neg + self.n_neg)]
+            triple = torch.cat((anchor, positive, negative), dim=0)
+            emb_pro_.append(triple)
+        emb_pro_ = torch.stack(emb_pro_, dim=0)
+        return emb_pro_
     def forward(self, encoded_sequence, id, id_frags_list, seq_frag_tuple, pos_neg, warm_starting):
         """
         Batch is built before forward(), in train_loop()
@@ -335,25 +348,10 @@ class Encoder(nn.Module):
                 classification_head = self.type_head(emb_pro)  # [sample, num_class]
                 if pos_neg is not None:
                     """CASE B, when this if condition is skipped, CASE A"""
-                    emb_pro_ = emb_pro.view((self.batch_size, 1 + self.n_pos + self.n_neg, -1))
-                    projection_head = self.projection_head(emb_pro_)
+                    projection_head = self.projection_head(self.reorganize_emb_pro(emb_pro))
             else:
                 """CASE C"""
-
-                n_batch = int(emb_pro.shape[0]/(1+self.n_pos+self.n_neg))
-                # print(n_batch)
-                # exit(0)
-                bch_anchors, bch_positives, bch_negatives = torch.split(emb_pro, [n_batch, n_batch*self.n_pos, n_batch*self.n_neg], dim=0)
-                emb_pro_ = []
-                for i in range(n_batch):
-                    anchor = bch_anchors[i].unsqueeze(0)
-                    positive = bch_positives[(i * self.n_pos):(i * self.n_pos + self.n_pos)]
-                    negative = bch_negatives[(i * self.n_neg):(i * self.n_neg + self.n_neg)]
-                    triple = torch.cat((anchor, positive, negative), dim=0)
-                    emb_pro_.append(triple)
-                emb_pro_ = torch.stack(emb_pro_, dim=0)
-
-                projection_head = self.projection_head(emb_pro_)
+                projection_head = self.projection_head(self.reorganize_emb_pro(emb_pro))
 
         else:
             """CASE D"""
