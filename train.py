@@ -113,6 +113,8 @@ def train_loop(tools, configs, warm_starting,train_writer):
                 target_frag_nplist_tuple += tuple(pos_transformed[j][3])
                 type_protein_pt_tuple += tuple(torch.from_numpy(arr) for arr in pos_transformed[j][4])
                 sample_weight_tuple += tuple(pos_transformed[j][5])
+            print('*')
+            print(len(id_tuple))
             # print(len(id_tuple))
             for i in range(b_size):
                 #print("pos_neg neg")
@@ -127,6 +129,8 @@ def train_loop(tools, configs, warm_starting,train_writer):
                 target_frag_nplist_tuple += tuple(neg_transformed[j][3])
                 type_protein_pt_tuple += tuple(torch.from_numpy(arr) for arr in neg_transformed[j][4])
                 sample_weight_tuple += tuple(neg_transformed[j][5])
+            print('*')
+            print(len(id_tuple))
             # print(len(id_tuple))
 
         id_frags_list, seq_frag_tuple, target_frag_pt, type_protein_pt = make_buffer(id_frag_list_tuple, seq_frag_list_tuple, target_frag_nplist_tuple, type_protein_pt_tuple)
