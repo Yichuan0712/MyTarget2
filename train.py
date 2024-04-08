@@ -99,45 +99,7 @@ def train_loop(tools, configs, warm_starting, train_writer):
             without the extending, each len(tuple) == batch_size
             after extending, len(tuple) == batch_size * (1 + n_pos + n_neg)
             """
-            # print("len of pos_neg = "+str(len(pos_neg)))
             flag_batch_extension = True
-            # pos_transformed = [[[] for _ in range(6)] for _ in range(configs.supcon.n_pos)]
-            # neg_transformed = [[[] for _ in range(6)] for _ in range(configs.supcon.n_neg)]
-            # for i in range(b_size):
-            #     # print("pos_neg pos")
-            #     # print(len(pos_neg[i][0]))
-            #     for j in range(configs.supcon.n_pos):
-            #         for k in range(6):
-            #             pos_transformed[j][k].append(pos_neg[i][0][j][k])
-            # # print('*')
-            # # print(len(id_tuple))
-            # # print(len(id_tuple))
-            # for j in range(configs.supcon.n_pos):
-            #     id_tuple += tuple(pos_transformed[j][0])
-            #     id_frag_list_tuple += tuple(pos_transformed[j][1])
-            #     seq_frag_list_tuple += tuple(pos_transformed[j][2])
-            #     target_frag_nplist_tuple += tuple(pos_transformed[j][3])
-            #     type_protein_pt_tuple += tuple(torch.from_numpy(arr) for arr in pos_transformed[j][4])
-            #     sample_weight_tuple += tuple(pos_transformed[j][5])
-            # # print('*')
-            # # print(len(id_tuple))
-            # # print(len(id_tuple))
-            # for i in range(b_size):
-            #     # print("pos_neg neg")
-            #     # print(len(pos_neg[i][1]))
-            #     for j in range(configs.supcon.n_neg):
-            #         for k in range(6):
-            #             neg_transformed[j][k].append(pos_neg[i][1][j][k])
-            # for j in range(configs.supcon.n_neg):
-            #     id_tuple += tuple(neg_transformed[j][0])
-            #     id_frag_list_tuple += tuple(neg_transformed[j][1])
-            #     seq_frag_list_tuple += tuple(neg_transformed[j][2])
-            #     target_frag_nplist_tuple += tuple(neg_transformed[j][3])
-            #     type_protein_pt_tuple += tuple(torch.from_numpy(arr) for arr in neg_transformed[j][4])
-            #     sample_weight_tuple += tuple(neg_transformed[j][5])
-            # print('*')
-            # print(len(id_tuple))
-            # print(len(id_tuple))
             for one_in_a_batch in range(b_size):
                 # pos_neg[one_in_a_batch][0]
                 for one_of_pos in range(configs.supcon.n_pos):
