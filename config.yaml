@@ -28,7 +28,7 @@ train_settings:
   grad_accumulation: 1
   loss_pos_weight: 35
   dataset: v2 # v2, v3
-  fine_tune_lr: 0 # -1, -2, -3
+  fine_tune_lr: -1 # -1, -2, -3
   log_every: 100
 
 
