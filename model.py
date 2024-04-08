@@ -341,8 +341,8 @@ class Encoder(nn.Module):
                 """CASE C"""
 
                 n_batch = int(emb_pro.shape[0]/(1+self.n_pos+self.n_neg))
-                print(n_batch)
-                exit(0)
+                # print(n_batch)
+                # exit(0)
                 bch_anchors, bch_positives, bch_negatives = torch.split(emb_pro, [n_batch, n_batch*self.n_pos, n_batch*self.n_neg], dim=0)
                 emb_pro_ = []
                 for i in range(n_batch):
