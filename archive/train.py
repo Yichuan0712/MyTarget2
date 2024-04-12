@@ -175,6 +175,8 @@ def train_loop(tools, configs, warm_starting,train_writer):
                                 configs.supcon.n_pos)
                 weighted_supcon_loss = configs.supcon.weight * supcon_loss
                 print(f"{global_step} supcon_loss:{weighted_supcon_loss.item()}")
+                with open('training_log.txt', 'a') as log_file:
+                    log_file.write(f"{global_step} supcon_loss:{supcon_loss.item()}\n")
                 train_writer.add_scalar('step supcon_loss', weighted_supcon_loss.item(), global_step=global_step)
                 weighted_loss_sum += weighted_supcon_loss
             if configs.supcon.apply is False and warm_starting:
