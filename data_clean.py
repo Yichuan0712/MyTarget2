@@ -77,6 +77,7 @@ class LocalizationDataset(Dataset):
             pos_samples = self.get_pos_samples(anchor)
             neg_samples = self.get_neg_samples(anchor)
             pos_neg = [pos_samples, neg_samples]
+        print(type_protein)
         return id, id_frag_list, seq_frag_list, target_frag_list, type_protein, sample_weight, pos_neg
         # return id, type_protein
 
